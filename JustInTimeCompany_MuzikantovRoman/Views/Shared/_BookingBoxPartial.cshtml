@@ -1,0 +1,78 @@
+﻿@model JustInTimeCompany_MuzikantovRoman.Domain.Entities.Booking
+
+@await Html.PartialAsync("_PlaneModalPartial")
+<div class="mx-3 mt-3 px-3 py-4 bg-dark row align-items-center">
+    <div class="col-1">
+        <div class="btn btn-primary btn-circle"><i class="fas fa-helicopter"></i></div>
+    </div>
+    <div class="text-light col-2">
+        #@Html.DisplayFor(modelItem => Model.BookingId)
+    </div>
+    <div class="text-light text-center col-2">
+        @Html.DisplayFor(modelItem => Model.Flight.DepartureAirport.Name)
+    </div>
+    <div class="col-1"><i class="fas fa-long-arrow-alt-right" style="color: white;"></i></div>
+    <div class="text-light col-2"><i>@Html.DisplayFor(modelItem => Model.Flight.ArrivalAirport.Name)</i></div>
+    <div class="text-light col-2">
+        Réservé le <i>@Html.DisplayFor(modelItem => Model.Date)</i>
+    </div>
+    <div class="col-2 d-flex justify-content-end">
+        @if (Model.CanBeCanceled())
+        {
+            <div data-toggle="modal" data-target="#bookingCancelModal">
+                <button onclick="setCancelModal(@Model.BookingId)" type="button" data-toggle="tooltip" data-placement="top" title="Annuler" class="btn btn-light btn-circle mr-2"><i class="fas fa-times mt-1"></i></button>
+            </div>
+            <div class="modal fade" id="bookingCancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Êtes vous sûr de vouloir annuler cette réservation ?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Vous êtes sur le point d'annuler votre réservation <b>#<span id="flightIdModal"></span></b>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                            <form asp-controller="Bookings" asp-action="Cancel">
+                                <input id="flightIdInput" type="hidden" name="bookingId" />
+                                <button type="submit" class="btn btn-primary">Confirmer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <button data-toggle="tooltip" data-placement="top" title="Agrandir" type="button" class="btn btn-light btn-circle dropdown-button" /><i class="fas fa-arrow-down"></i>
+    </div>
+</div>
+<div class="dropdown-content bg-light mx-3 mb-4 d-flex align-items-center row" style="height: 0; visibility: hidden">
+    <div class="col-3 d-flex flex-column">
+        <p><i class="far fa-calendar-alt"></i> Départ le <span class="text-title">@Html.DisplayFor(modelItem => Model.Flight.DepartureTime)</span></p>
+        <p><i class="far fa-calendar-alt"></i> Arrivé le <span class="text-title">@Html.DisplayFor(modelItem => Model.Flight.ArrivalTime)</span></p>
+    </div>
+    <div class="col-4 d-flex flex-column">
+        <p>Vous avez réservé <span class="text-title">@Html.DisplayFor(modelItem => Model.Count)</span> place(s).</p>
+        <p>Il reste <span class="text-title">@Html.DisplayFor(modelItem => Model.Flight.RemainingSeats)</span> place(s) sur ce vol.</p>
+    </div>
+    <div class="col-5 d-flex flex-column">
+        <div>Hélicoptère : <span class="text-title">@Html.DisplayFor(modelItem => Model.Flight.Plane.Name)</span> <a href="#" onclick="setPlaneInfoModal('@Model.Flight.Plane.Name', '@Model.Flight.Plane.Capacity', '@Model.Flight.Plane.Speed', '@Model.Flight.Plane.Motor')" data-toggle="modal" data-target="#planeDetailModal" class="pl-2">Voir détail</a></div>
+        <div>Vol : <b>#@Model.Flight.FlightId</b></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function setCancelModal(id) {
+        $("#flightIdModal").text(id);
+        $("#flightIdInput").attr("value", id);
+    }
+
+    function setPlaneInfoModal(name, capacity, speed, motor) {
+        $("#planeName").text(name);
+        $("#planeCapacity").text(capacity);
+        $("#planeSpeed").text(speed);
+        $("#planeMotor").text(motor);
+    }
+</script>

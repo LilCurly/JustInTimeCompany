@@ -1,0 +1,105 @@
+﻿@model JustInTimeCompany_MuzikantovRoman.Models.ViewModels.FlightFormViewModel
+
+@if (ViewData["Error"] != null)
+{
+    <div class="text-danger mb-3">@ViewData["Error"]</div>
+}
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div>
+    <div class="form-group mt-2">
+        <label asp-for="Heli" class="text-light bg-dark p-2 mb-0 ml-1"></label>
+        <div class="input-group">
+            <select asp-for="Heli" class="custom-select">
+                @foreach (var plane in Model.Planes)
+                {
+                    <option value="@plane.PlaneId">@Html.DisplayFor(modelItem => plane.Name)</option>
+                }
+            </select>
+        </div>
+        <span asp-validation-for="Heli" class="text-danger"></span>
+    </div>
+    <hr />
+    <div class="row d-flex align-items-baseline">
+        <div class='col-md-5'>
+            <div class="form-group">
+                <label class="text-light bg-dark p-2 mb-0 ml-1" asp-for="DepartureAirport"></label>
+                <div class="input-group">
+                    <select asp-for="DepartureAirport" class="custom-select">
+                        @foreach (var airport in Model.Airports)
+                        {
+                            <option value="@airport.AirportId">@Html.DisplayFor(modelItem => airport.Name)</option>
+                        }
+                    </select>
+                </div>
+                <span asp-validation-for="DepartureAirport" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-2 text-center align-self-center mt-3"><i class="fas fa-long-arrow-alt-right"></i></div>
+        <div class='col-md-5'>
+            <div class="form-group">
+                <label asp-for="ArrivalAirport" class="text-light bg-dark p-2 mb-0 ml-1"></label>
+                <div class="input-group">
+                    <select asp-for="ArrivalAirport" class="custom-select">
+                        @foreach (var airport in Model.Airports)
+                        {
+                            <option value="@airport.AirportId">@Html.DisplayFor(modelItem => airport.Name)</option>
+                        }
+                    </select>
+                </div>
+                <span asp-validation-for="ArrivalAirport" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row d-flex align-items-baseline">
+    <div class='col-md-5'>
+        <div class="form-group">
+            <label class="text-light bg-dark p-2 mb-0 ml-1" asp-for="DepartureDateTime"></label>
+            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                <input id="from" oninput="updatePilots()" asp-for="DepartureDateTime" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" />
+                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+            <span asp-validation-for="DepartureDateTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2 text-center align-self-center mt-3" style="font-weight:600">AU</div>
+    <div class='col-md-5'>
+        <div class="form-group">
+            <label asp-for="ArrivalDateTime" class="text-light bg-dark p-2 mb-0 ml-1"></label>
+            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                <input id="to" oninput="updatePilots()" asp-for="ArrivalDateTime" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" />
+                <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+            <span asp-validation-for="ArrivalDateTime" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="form-group mt-2">
+    <label asp-for="Pilot" class="text-light bg-dark mb-0 ml-1 p-2"></label>
+    <div class="d-flex justify-content-center col-12 p-0 mb-5">
+        <select disabled id="pilots" asp-for="Pilot" class="custom-select">
+            <option disabled selected hidden>Aucun pilote disponible</option>
+        </select>
+    </div>
+    <span asp-validation-for="Pilot" class="text-danger"></span>
+</div>
+<hr />
+<div class="form-group mt-2">
+    <label asp-for="Seats" class="text-light bg-dark mb-0 ml-1 p-2"></label>
+    <div class="d-flex justify-content-center col-12 p-0 mb-5">
+        <select id="seats" asp-for="Seats" class="custom-select">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <span asp-validation-for="Seats" class="text-danger"></span>
+</div>

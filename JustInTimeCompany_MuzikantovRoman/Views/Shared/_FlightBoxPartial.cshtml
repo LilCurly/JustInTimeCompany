@@ -1,0 +1,249 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using JustInTimeCompany_MuzikantovRoman.Infrastructure.Data.Entities
+@model JustInTimeCompany_MuzikantovRoman.Domain.Entities.Flight
+@inject UserManager<AppUser> userManager
+
+
+@await Html.PartialAsync("_PlaneModalPartial", Model.Plane)
+
+<div class="mx-3 mt-3 px-3 py-4 bg-dark row align-items-center flightBox">
+    <div class="col-1">
+        <div class="btn btn-primary btn-circle"><i class="fas fa-helicopter"></i></div>
+    </div>
+    <div class="text-light col-2">
+        #@Html.DisplayFor(modelItem => Model.FlightId)
+    </div>
+    <div class="text-light text-center col-2">
+        @Html.DisplayFor(modelItem => Model.DepartureAirport.Name)
+    </div>
+    <div class="col-1"><i class="fas fa-long-arrow-alt-right" style="color: white;"></i></div>
+    <div class="text-light col-2"><i>@Html.DisplayFor(modelItem => Model.ArrivalAirport.Name)</i></div>
+    <div class="text-light col-2">
+        Départ le <i>@Html.DisplayFor(modelItem => Model.DepartureTime)</i>
+    </div>
+    <div class="col-2 d-flex justify-content-end">
+        @if (Model.CanBeCanceledOrModified())
+        {
+            @if (User.IsInRole("Director"))
+            {
+                <a asp-controller="Flights" asp-action="Modify" asp-route-id="@Model.FlightId" data-toggle="tooltip" data-placement="top" title="Modifier" class="btn btn-light btn-circle mr-2"><i class="fas fa-pencil-alt mt-1"></i></a>
+                <div class="modal fade" id="flightDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Êtes vous sûr de vouloir supprimer ce vol ?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Vous êtes sur le point de supprimer le vol <b>#<span id="flightIdDelete"></span></b>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                <form asp-controller="Flights" asp-action="Delete">
+                                    <input id="flightIdDeleteForm" type="hidden" name="flightId" />
+                                    <button type="submit" class="btn btn-primary">Confirmer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-toggle="modal" data-target="#flightDeleteModal">
+                    <button onclick="setDeleteModal(@Model.FlightId)" type="button" data-toggle="tooltip" data-placement="top" title="Supprimer" class="btn btn-light btn-circle mr-2"><i class="fas fa-times mt-1"></i></button>
+                </div>
+            }
+            <div data-toggle="modal" data-target="#flightBookModal">
+                <button onclick="setBookModal(@Model.FlightId, @Model.RemainingSeats)" type="button" data-toggle="tooltip" data-placement="top" title="Réserver" class="btn btn-light btn-circle mr-2"><i class="fas fa-book"></i></button>
+            </div>
+            <div class="modal fade" id="flightBookModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form asp-controller="Flights" asp-action="Book">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Réservation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Vous êtes sur le point d'effectuer une réservation pour le vol <b>#<span id="flightIdBook"></span></b>
+                                <br />
+                                <div class="row d-flex align-items-baseline">
+                                    <div class="col-6">Nombre de place(s) ?</div>
+                                    <div class="col-6"><input id="spinner" type="number" value="1" min="1" step="1" name="count" /></div>
+                                </div>
+                                <br />
+                                <div id="bookError" class="text-danger"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                <input id="flightIdBookForm" type="hidden" name="flightId" />
+                                <button id="submitBookButton" type="submit" class="btn btn-primary">Confirmer</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+        @if ((userManager.GetUserAsync(User).Result).User == Model.Pilot && Model.CanBeConfirmed() && !Model.IsConfirmed)
+        {
+            <div data-toggle="modal" data-target="#flightConfirmModal">
+                <button onclick="setConfirmModal(@Model.FlightId)" type="button" data-toggle="tooltip" data-placement="top" title="Confirmer" class="btn btn-light btn-circle mr-2"><i class="fas fa-check"></i></button>
+            </div>
+            <div class="modal fade" id="flightConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form asp-controller="Flights" asp-action="Confirm">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Confirmation du vol</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-2">Vous êtes sur le point de confirmer le vol <b>#<span id="flightIdConfirm"></span></b></div>
+                                <br />
+                                <div class="row d-flex align-items-baseline">
+                                    <div class="col-3">Départ à</div>
+                                    <div class="col-9">
+                                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                            <input id="from" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" name="from" />
+                                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row d-flex align-items-baseline">
+                                    <div class="col-3">Arrivé à</div>
+                                    <div class="col-9">
+                                        <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                                            <input oninput="checkIfLate('@Model.ArrivalTime')" id="to" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" name="to" />
+                                            <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <label>Raison du retard</label>
+                                <textarea oninput="checkCommentLength()" id="confirmModalComment" class="form-control" rows="3" style="resize: none;" name="comment" disabled></textarea>
+                                <div class="text-danger mt-1" id="commentError"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                <input id="flightIdConfirmForm" type="hidden" name="flightId" />
+                                <button id="submitConfirmButton" type="submit" class="btn btn-primary">Confirmer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+        <button data-toggle="tooltip" data-placement="top" title="Agrandir" type="button" class="btn btn-light btn-circle dropdown-button" /><i class="fas fa-arrow-down"></i>
+    </div>
+</div>
+<div class="dropdown-content bg-light mx-3 mb-4 d-flex align-items-center row" style="height: 0; visibility: hidden">
+    <div class="col-3 d-flex flex-column">
+        <p><i class="far fa-calendar-alt"></i> Départ le <span class="text-title">@Html.DisplayFor(modelItem => Model.DepartureTime)</span></p>
+        <p><i class="far fa-calendar-alt"></i> Arrivé le <span class="text-title">@Html.DisplayFor(modelItem => Model.ArrivalTime)</span></p>
+    </div>
+    <div class="col-3"><span class="text-title">@Html.DisplayFor(modelItem => Model.RemainingSeats)/@Html.DisplayFor(modelItem => Model.Seats)</span> place(s) restante(s)</div>
+    <div class="col-6 d-flex flex-column">
+        <div class="">Hélicoptère : <span class="text-title">@Html.DisplayFor(modelItem => Model.Plane.Name)</span> <a href="#" onclick="setPlaneInfoModal('@Model.Plane.Name', '@Model.Plane.Capacity', '@Model.Plane.Speed', '@Model.Plane.Motor')" data-toggle="modal" data-target="#planeDetailModal" class="pl-2">Voir détail</a></div>
+        <div class="">Pilote : <span class="text-title">@Html.DisplayFor(modelItem => Model.Pilot.FullName)</span></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function setBookModal(id, max) {
+        if (max === 0) {
+            $("#submitBookButton").attr("disabled", "");
+            $("#bookError").text("Plus de places disponibles pour ce vol");
+        }
+        else {
+            $("#submitBookButton").removeAttr("disabled");
+            $("#bookError").text("");
+        }
+        var spinner = $("#spinner");
+        spinner.attr("max", max);
+        $("#flightIdBook").text(id);
+        $("#flightIdBookForm").attr("value", id);
+    }
+
+    function setDeleteModal(id) {
+        $('#flightIdDelete').text(id);
+        $('#flightIdDeleteForm').attr("value", id);
+    }
+
+    function setPlaneInfoModal(name, capacity, speed, motor) {
+        $("#planeName").text(name);
+        $("#planeCapacity").text(capacity);
+        $("#planeSpeed").text(speed);
+        $("#planeMotor").text(motor);
+    }
+
+    function setConfirmModal(id) {
+        $("#flightIdConfirmForm").attr("value", id);
+        $("#flightIdConfirm").text(id);
+        $("#confirmModalComment").attr("disabled", "");
+        $("#confirmModalComment").val("");
+        $("#submitConfirmButton").removeAttr("disabled");
+        $("#commentError").text("");
+        $("#from").val("");
+        $("#to").val("");
+    }
+
+    function checkIfLate(test) {
+        let dateSplit = test.split("/");
+        let arrivalTime = new Date(dateSplit[1] + "/" + dateSplit[0] + "/" + dateSplit[2]);
+
+        let actualDateSplit = $("#to").val().split("/");
+        let actualArrivalTime = new Date(actualDateSplit[1] + "/" + actualDateSplit[0] + "/" + actualDateSplit[2]);
+
+        if (arrivalTime < actualArrivalTime) {
+            $("#confirmModalComment").removeAttr("disabled");
+            $("#submitConfirmButton").attr("disabled", "");
+            $("#commentError").text("Veuillez indiquer un commentaire de minimum 10 caractères pour expliquer la raison du retard.");
+            checkCommentLength();
+        }
+        else {
+            $("#confirmModalComment").attr("disabled", "");
+            $("#confirmModalComment").val("");
+            $("#submitConfirmButton").removeAttr("disabled");
+            $("#commentError").text("");
+        }
+    }
+
+    function checkCommentLength() {
+        if ($("#confirmModalComment").val().length >= 10) {
+            $("#submitConfirmButton").removeAttr("disabled");
+            $("#commentError").text("");
+        }
+        else {
+            $("#submitConfirmButton").attr("disabled", "");
+            $("#commentError").text("Veuillez indiquer un commentaire de minimum 10 caractères pour expliquer la raison du retard.");
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            locale: 'fr'
+        });
+        $('#datetimepicker2').datetimepicker({
+            locale: 'fr',
+            useCurrent: false
+        });
+        $("#datetimepicker1").on("change.datetimepicker", function (e) {
+            $('#datetimepicker2').datetimepicker('minDate', e.date);
+        });
+        $("#datetimepicker2").on("change.datetimepicker", function (e) {
+            $('#datetimepicker1').datetimepicker('maxDate', e.date);
+        });
+    });
+</script>

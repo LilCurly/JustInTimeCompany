@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using JustInTimeCompany_MuzikantovRoman.Infrastructure.Data.Entities
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <button type="submit" class="pt-2 pb-2 pl-3 pr-3 btn-disconnect nav-link text-center">SE DECONNECTER</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right d-flex flex-row flex-nowrap justify-content-between col-xl-2 col-lg-5 col-md-5 col-sm-5">
+        <li><a class="pt-2 pb-2 pl-3 pr-3 btn-connect nav-link text-center" asp-area="Identity" asp-page="/Account/Register">S'INSCRIRE</a></li>
+        <li><a class="pt-2 pb-2 pl-3 pr-3 btn-connect nav-link text-center" asp-area="Identity" asp-page="/Account/Login">SE CONNECTER</a></li>
+    </ul>
+}

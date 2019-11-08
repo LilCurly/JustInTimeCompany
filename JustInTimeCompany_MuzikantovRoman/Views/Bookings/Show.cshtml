@@ -1,0 +1,29 @@
+﻿@model List<JustInTimeCompany_MuzikantovRoman.Domain.Entities.Booking>
+
+@{
+    ViewData["Title"] = "Show";
+}
+
+@section SideNavigation
+{
+    <partial name="_SideNavigationPartial" />
+}
+
+<div class="mt-3 pl-3">
+    <h2>VOS RESERVATIONS</h2>
+    <div class="bg-primary-light mb-3">
+        <h3 class="p-2">RESUME</h3>
+        <div class="pb-3">
+            @foreach(var booking in Model){
+                await Html.RenderPartialAsync("_BookingBoxPartial", booking);
+            }
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/js/scripts.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/mylib/scripts.min.js"></script>
+</environment>

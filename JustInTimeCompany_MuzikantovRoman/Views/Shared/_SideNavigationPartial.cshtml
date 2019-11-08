@@ -1,0 +1,32 @@
+﻿
+<div class="sticky-top nav-main">
+    <div class="">
+        <ul class="pl-4 pr-4 pt-4 nav container-fluid d-flex flex-column">
+            <li class="nav-item"><a class="nav-link custom-nav-link mb-4" asp-controller="Home" asp-action="Show">ACCUEIL</a></li>
+            <li class="nav-item"><a class="nav-link custom-nav-link mb-4" asp-controller="Flights" asp-action="Show">CHERCHER UN VOL</a></li>
+            <li class="nav-item"><a class="nav-link custom-nav-link mb-4" asp-controller="Bookings" asp-action="Show">MES RESERVATIONS</a></li>
+            @if (User.IsInRole("Pilot"))
+            {
+                <li class="nav-item"><a class="nav-link custom-nav-link mb-4" asp-controller="Flights" asp-action="Handle">MES VOLS</a></li>
+            }
+            @if (User.IsInRole("Director"))
+            {
+                <li class="nav-item"><a class="nav-link custom-nav-link mb-4" asp-controller="Flights" asp-action="Create">NOS APPAREILS</a></li>
+                <li class="nav-item"><a class="nav-link custom-nav-link mb-4" asp-controller="Planes" asp-action="Show">NOS APPAREILS</a></li>
+                <li class="nav-item"><a class="nav-link custom-nav-link mb-4" asp-controller="Statistics" asp-action="Show">STATISTIQUES</a></li>
+            }
+            @if ((string)ViewContext.RouteData.Values["Controller"] == "Flights" && (string)ViewContext.RouteData.Values["Action"] == "Show")
+            {
+                <li><partial name="_FilterFlightsPartial" /></li>
+                @if (User.IsInRole("Pilot"))
+                {
+                    <li></li>
+                }
+            }
+            @if ((string)ViewContext.RouteData.Values["Controller"] == "Bookings" && (string)ViewContext.RouteData.Values["Action"] == "Show")
+            {
+                <li></li>
+            }
+        </ul>
+    </div>
+</div>

@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustInTimeCompany_MuzikantovRoman", "JustInTimeCompany_MuzikantovRoman\JustInTimeCompany_MuzikantovRoman.csproj", "{5B2E2A80-A791-4571-8EEE-DC979A777FDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustInTimeCompany_MuzikantovRoman", "JustInTimeCompany_MuzikantovRoman\JustInTimeCompany_MuzikantovRoman.csproj", "{5B2E2A80-A791-4571-8EEE-DC979A777FDF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustInTimeCompany_MuzikantovRoman.Domain", "JustInTimeCompany_MuzikantovRoman.Domain\JustInTimeCompany_MuzikantovRoman.Domain.csproj", "{F90213A6-F822-42AF-B2A6-B23CD9BDF015}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustInTimeCompany_MuzikantovRoman.ApplicationCore", "JustInTimeCompany_MuzikantovRoman.ApplicationCore\JustInTimeCompany_MuzikantovRoman.ApplicationCore.csproj", "{134016C2-C71D-4834-9160-FC70868E7C80}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustInTimeCompany_MuzikantovRoman.Infrastructure", "JustInTimeCompany_MuzikantovRoman.Infrastructure\JustInTimeCompany_MuzikantovRoman.Infrastructure.csproj", "{78455AA4-D839-48AB-AD14-27B0928C7239}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{5B2E2A80-A791-4571-8EEE-DC979A777FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B2E2A80-A791-4571-8EEE-DC979A777FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B2E2A80-A791-4571-8EEE-DC979A777FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F90213A6-F822-42AF-B2A6-B23CD9BDF015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F90213A6-F822-42AF-B2A6-B23CD9BDF015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F90213A6-F822-42AF-B2A6-B23CD9BDF015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F90213A6-F822-42AF-B2A6-B23CD9BDF015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{134016C2-C71D-4834-9160-FC70868E7C80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{134016C2-C71D-4834-9160-FC70868E7C80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{134016C2-C71D-4834-9160-FC70868E7C80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{134016C2-C71D-4834-9160-FC70868E7C80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78455AA4-D839-48AB-AD14-27B0928C7239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78455AA4-D839-48AB-AD14-27B0928C7239}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78455AA4-D839-48AB-AD14-27B0928C7239}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78455AA4-D839-48AB-AD14-27B0928C7239}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

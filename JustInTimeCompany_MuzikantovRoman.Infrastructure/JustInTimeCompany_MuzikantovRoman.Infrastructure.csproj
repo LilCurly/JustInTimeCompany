@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Data\EntityFramework\Repositories\FlightRepository.cs~RF806989.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JustInTimeCompany_MuzikantovRoman.ApplicationCore\JustInTimeCompany_MuzikantovRoman.ApplicationCore.csproj" />
+    <ProjectReference Include="..\JustInTimeCompany_MuzikantovRoman.Domain\JustInTimeCompany_MuzikantovRoman.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

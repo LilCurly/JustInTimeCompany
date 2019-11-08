@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/da81bdb760.js"></script>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/style.css" />
+        <link rel="stylesheet" href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/mylib/style.css" rel="stylesheet" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
+    </environment>
+
+    <title>@ViewData["Title"] - Just In Time Company</title>
+</head>
+<body class="container-fluid">
+
+    <environment include="Development">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="~/lib/moment.js/moment.js"></script>
+        <script src="~/lib/moment.js/moment-with-locales.js"></script>
+        <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/jquery.min.js"
+                crossorigin="anonymous"
+                integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"
+                asp-fallback-src="~/lib/jquery/jquery-validate/jquery.validate.min.js"
+                crossorigin="anonymous"
+                integrity="sha256-sPB0F50YUDK0otDnsfNHawYmA5M0pjjUf4TvRJkGFrI=">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"
+                asp-fallback-src="~/lib/jquery/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+                crossorigin="anonymous"
+                integrity="sha256-9GycpJnliUjJDVDqP0UEu/bsm9U+3dnQUH8+3W10vkY=">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/js/bootstrap.bundle.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+        <script src="~/lib/moment.js/moment.min.js"></script>
+        <script src="~/lib/moment.js/moment-with-locales.min.js"></script>
+        <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    </environment>
+    <script src="~/lib/input-spinner/bootstrap-input-spinner.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+            $("input[type='number']").inputSpinner()
+        })
+    </script>
+
+    @if (IsSectionDefined("Scripts"))
+    {
+        @RenderSection("Scripts", false)
+    }
+
+    <header class="row pl-4 pr-5 pt-2 pb-2 bg-primary">
+        <a asp-controller="Home" asp-action="Index" class="text-center text-lg-left col-xl-10 col-lg-7 col-md-7 col-sm-7" style="text-decoration: none"><h1 style="font-size: 28px; color: antiquewhite">Just In Time Company</h1></a>
+        <partial name="_LoginPartial" />
+    </header>
+
+    <main class="row">
+        @if (IsSectionDefined("SideNavigation"))
+        {
+            <div class="col-lg-3 pl-0 bg-dark">
+                @RenderSectionAsync("SideNavigation", false)
+            </div>
+        }
+        <div class="col-lg-9 pr-0 pl-0">
+            @RenderBody()
+        </div>
+    </main>
+
+</body>
+</html>

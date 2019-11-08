@@ -1,0 +1,31 @@
+﻿@model List<JustInTimeCompany_MuzikantovRoman.Domain.Entities.Plane>
+
+
+@foreach (var plane in Model)
+{
+    <div class="mx-3 mt-3 px-3 py-4 bg-dark row align-items-center">
+        <div class="col-2">
+            <div class="btn btn-primary btn-circle"><i class="fas fa-helicopter"></i></div>
+        </div>
+        <div class="text-light col-2">
+            #@Html.DisplayFor(modelItem => plane.PlaneId)
+        </div>
+        <div class="text-light col-2">
+            @Html.DisplayFor(modelItem => plane.Name)
+        </div>
+        <div class="@(plane.IsInGararge() ? "text-warning" : "text-success") col-2" >
+            @Html.DisplayFor(modelItem => plane.State)
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+            @if (plane.IsInGararge())
+            {
+                <a asp-controller="Planes" asp-action="Update" asp-route-id="@plane.PlaneId" class="btn btn-light btn-circle mr-2"><i class="fas fa-check"></i></a>
+            }
+            <button type="button" class="btn btn-light btn-circle dropdown-button" /><i class="fas fa-arrow-down"></i>
+        </div>
+    </div>
+    <div class="dropdown-content bg-light mx-3 mb-4 d-flex align-items-center row" style="height: 0; visibility: hidden">
+        <div class="col-3"><span class="text-title">@Html.DisplayFor(modelItem => plane.Motor)</span></div>
+        <div class="col-3"><span class="text-title">@Html.DisplayFor(modelItem => plane.Speed)</span>KM/h</div>
+    </div>
+}
